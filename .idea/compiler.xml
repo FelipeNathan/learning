@@ -13,6 +13,7 @@
     <bytecodeTargetLevel>
       <module name="learn-jwt-app" target="11" />
       <module name="learn-jwt-ear" target="1.5" />
+      <module name="learning" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
