@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
-import javax.servlet.http.HttpSession
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 class UserController {
@@ -14,11 +14,11 @@ class UserController {
     fun user(@AuthenticationPrincipal principal: OAuth2User) = Collections.singletonMap("name", principal.name)
 
     @GetMapping("/error")
-    fun error(session: HttpSession): String {
+    fun error(request: HttpServletRequest): String? {
 
-        val errorMessage = session.getAttribute("error.message") as String
-        session.removeAttribute("error.message")
+        val errorMessage = request.session.getAttribute("error.message")
+        request.session.removeAttribute("error.message")
 
-        return errorMessage
+        return errorMessage?.toString()
     }
 }
