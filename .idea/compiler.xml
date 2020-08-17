@@ -8,17 +8,20 @@
         <outputRelativeToContentRoot value="true" />
         <module name="learn-jwt-ear" />
         <module name="learn-jwt-app" />
+        <module name="learn-oauth2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="learn-jwt-app" target="11" />
       <module name="learn-jwt-ear" target="1.5" />
+      <module name="learn-oauth2" target="11" />
       <module name="learning" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="learn-jwt-app" options="-parameters" />
+      <module name="learn-oauth2" options="-parameters" />
     </option>
   </component>
 </project>

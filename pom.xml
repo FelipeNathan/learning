@@ -17,6 +17,7 @@
     <modules>
         <module>learn-jwt-app</module>
         <module>learn-jwt-ear</module>
+        <module>learn-oauth2</module>
     </modules>
 
 </project>

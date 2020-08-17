@@ -6,6 +6,7 @@
         <option value="$PROJECT_DIR$/learn-jwt-app/pom.xml" />
         <option value="$PROJECT_DIR$/learn-jwt-ear/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/learn-oauth2/pom.xml" />
       </list>
     </option>
   </component>
