@@ -6,11 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
-@RestController
-class HomeController(val awsS3Service: AwsS3Service) {
-
-    @GetMapping
-    fun home() = "Hello :)"
+abstract class BaseController(private val awsS3Service: AwsS3Service) {
 
     @PostMapping("/store", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun store(@RequestPart file: MultipartFile): String {

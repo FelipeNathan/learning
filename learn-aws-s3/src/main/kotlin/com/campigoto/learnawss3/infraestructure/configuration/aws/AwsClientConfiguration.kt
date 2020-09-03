@@ -1,4 +1,4 @@
-package com.campigoto.learnawss3.infraestructure
+package com.campigoto.learnawss3.infraestructure.configuration.aws
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
@@ -6,19 +6,13 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.transfer.TransferManager
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
-@Configuration
-class AwsS3ClientConfiguration(
-        @Value("\${aws.s3.region}") val region: String,
-        @Value("\${aws.s3.key}") val key: String,
-        @Value("\${aws.s3.secret}") val secret: String
-) {
+abstract class AwsClientConfiguration(
+        open val region: String? = null,
+        open val key: String? = null,
+        open val secret: String? = null) {
 
-    @Bean
-    fun client(): AmazonS3 {
+    open fun client(): AmazonS3 {
 
         val credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(key, secret))
 
@@ -29,8 +23,7 @@ class AwsS3ClientConfiguration(
                 .build()
     }
 
-    @Bean
-    fun transferManager(client: AmazonS3): TransferManager {
+    open fun transferManager(client: AmazonS3): TransferManager {
         return TransferManagerBuilder.standard().withS3Client(client).build()
     }
 }

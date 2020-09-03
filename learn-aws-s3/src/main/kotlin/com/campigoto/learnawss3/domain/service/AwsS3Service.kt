@@ -4,12 +4,9 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.*
 import com.amazonaws.services.s3.transfer.TransferManager
 import com.campigoto.learnawss3.domain.valueObjects.AwsS3VO
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
 
-@Service
-class AwsS3Service(
-        @Value("\${aws.s3.bucket}") private val bucket: String,
+abstract class AwsS3Service(
+        private val bucket: String,
         private val client: AmazonS3,
         private val transferManager: TransferManager
 ) {
