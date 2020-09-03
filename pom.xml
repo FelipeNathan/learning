@@ -18,6 +18,7 @@
         <module>learn-jwt-app</module>
         <module>learn-jwt-ear</module>
         <module>learn-oauth2</module>
+        <module>learn-aws-s3</module>
     </modules>
 
 </project>
