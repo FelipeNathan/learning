@@ -3,6 +3,7 @@ package com.campigoto.learnawss3.domain.service
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.*
 import com.amazonaws.services.s3.transfer.TransferManager
+import com.campigoto.learnawss3.application.exception.AwsObjectException
 import com.campigoto.learnawss3.domain.valueObjects.AwsS3VO
 
 abstract class AwsS3Service(
@@ -12,6 +13,8 @@ abstract class AwsS3Service(
 ) {
 
     fun store(vo: AwsS3VO) {
+
+        validateAwsS3Vo(vo)
 
         val metadata = ObjectMetadata().apply {
             contentLength = vo.fileSize ?: 0
@@ -78,6 +81,18 @@ abstract class AwsS3Service(
         val successfulDeletes = this.client.deleteObjects(request).deletedObjects.size
 
         println("Successfull deletes: $successfulDeletes")
+    }
+
+    private fun validateAwsS3Vo(vo: AwsS3VO) {
+
+        if (vo.file == null)
+            throw AwsObjectException("File is required")
+
+        if (vo.fileName == null)
+            throw AwsObjectException("File name is required")
+
+        if (vo.contentType == null)
+            throw AwsObjectException("Content type is required")
     }
 
 }

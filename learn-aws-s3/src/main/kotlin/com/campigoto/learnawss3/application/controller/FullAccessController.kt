@@ -6,4 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/full-access")
-class FullAccessController (val awsS3FullAccessService: AwsS3FullAccessService) : BaseController(awsS3FullAccessService)
+class FullAccessController (awsS3FullAccessService: AwsS3FullAccessService) : BaseController(awsS3FullAccessService)

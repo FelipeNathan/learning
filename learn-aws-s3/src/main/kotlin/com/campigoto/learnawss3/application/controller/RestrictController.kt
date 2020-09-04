@@ -6,4 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/restrict")
-class RestrictController(val awsS3RestrictAccessService: AwsS3RestrictAccessService) : BaseController(awsS3RestrictAccessService)
+class RestrictController(awsS3RestrictAccessService: AwsS3RestrictAccessService) : BaseController(awsS3RestrictAccessService)
