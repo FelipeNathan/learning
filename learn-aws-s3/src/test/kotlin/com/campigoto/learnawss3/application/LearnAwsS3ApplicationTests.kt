@@ -84,4 +84,27 @@ class LearnAwsS3ApplicationTests {
         assertEquals(restrictTransferManager.amazonS3Client.region, restrictRegionType)
         assertEquals(fullClientFactory.region, restrictRegionType)
     }
+
+    /**
+     * This was captured in @Configuration vs @Component class with @Bean methods
+     * when use one @Bean dependency into another as call method
+     *
+     *  * <pre class="code">
+     *     &#064;Bean
+     *     public AmazonS3 client() {
+     *         return new AmazonS3(...);
+     *     }
+     *
+     *     &#064;Bean
+     *     public TransferManager rransferManager() {
+     *         return TransferManagerBuilder.standard().withS3Client(client()).build();
+     *     }
+     * </pre>
+     * */
+    @Test
+    fun `pure client should be same instance of transfer manager client attribute`() {
+
+        assertEquals(restrictClient, restrictTransferManager.amazonS3Client)
+        assertEquals(fullClient, fullTransferManager.amazonS3Client)
+    }
 }

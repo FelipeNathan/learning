@@ -22,7 +22,7 @@ class AwsFullAccessConfiguration(
 
     @Primary
     @Bean(name = ["fullAccessTransferManager"])
-    override fun transferManager(client: AmazonS3): TransferManager {
-        return super.transferManager(client)
+    override fun transferManager(): TransferManager {
+        return super.transferManager()
     }
 }

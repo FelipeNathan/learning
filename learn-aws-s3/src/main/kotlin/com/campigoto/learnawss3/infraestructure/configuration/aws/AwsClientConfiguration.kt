@@ -23,7 +23,7 @@ abstract class AwsClientConfiguration(
                 .build()
     }
 
-    open fun transferManager(client: AmazonS3): TransferManager {
-        return TransferManagerBuilder.standard().withS3Client(client).build()
+    open fun transferManager(): TransferManager {
+        return TransferManagerBuilder.standard().withS3Client(client()).build()
     }
 }

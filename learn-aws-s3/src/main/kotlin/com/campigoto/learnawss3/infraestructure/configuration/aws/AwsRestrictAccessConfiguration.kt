@@ -2,7 +2,6 @@ package com.campigoto.learnawss3.infraestructure.configuration.aws
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.transfer.TransferManager
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,7 +19,7 @@ class AwsRestrictAccessConfiguration(
     }
 
     @Bean(name = ["restrictAccessTransferManager"])
-    override fun transferManager(@Qualifier("restrictAccessClient") client: AmazonS3): TransferManager {
-        return super.transferManager(client)
+    override fun transferManager(): TransferManager {
+        return super.transferManager()
     }
 }
