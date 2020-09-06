@@ -8,18 +8,23 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class AwsRestrictAccessConfiguration(
-        @Value("\${aws.s3.restrict.region}") override val region: String,
-        @Value("\${aws.s3.restrict.key}") override val key: String,
-        @Value("\${aws.s3.restrict.secret}") override val secret: String
-) : AwsClientConfiguration(region, key, secret) {
+        @Value("\${aws.s3.restrict.region}") private val region: String,
+        @Value("\${aws.s3.restrict.key}") private val key: String,
+        @Value("\${aws.s3.restrict.secret}") private val secret: String,
+        @Value("\${aws.s3.restrict.bucket}") private val bucket: String,
+        private val awsClientBuilder: AwsClientBuilder
+) : AwsConfiguration {
 
-    @Bean(name = ["restrictAccessClient"])
-    override fun client(): AmazonS3 {
-        return super.client()
+    @Bean("awsRestrictAccessClient")
+    override fun getClient(): AmazonS3 {
+        return awsClientBuilder.client(key, secret, region)
     }
 
-    @Bean(name = ["restrictAccessTransferManager"])
-    override fun transferManager(): TransferManager {
-        return super.transferManager()
+    @Bean("awsRestrictAccessTransferManager")
+    override fun getTransferManager(): TransferManager {
+        return awsClientBuilder.transferManager(getClient())
     }
+
+    @Bean("awsRestrictAccessBucket")
+    override fun getBucket(): String = bucket
 }

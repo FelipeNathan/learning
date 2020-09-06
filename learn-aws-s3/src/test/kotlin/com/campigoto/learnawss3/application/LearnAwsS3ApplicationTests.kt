@@ -9,9 +9,9 @@ import com.campigoto.learnawss3.domain.valueObjects.BucketType
 import com.campigoto.learnawss3.infraestructure.configuration.aws.AwsFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -28,20 +28,6 @@ class LearnAwsS3ApplicationTests {
     @Autowired
     lateinit var restrictController: RestrictController
 
-    @Autowired
-    lateinit var fullClient: AmazonS3
-
-    @Autowired
-    lateinit var fullTransferManager: TransferManager
-
-    @Autowired
-    @Qualifier("restrictAccessClient")
-    lateinit var restrictClient: AmazonS3
-
-    @Autowired
-    @Qualifier("restrictAccessTransferManager")
-    lateinit var restrictTransferManager: TransferManager
-
     @Value("\${aws.s3.region}")
     lateinit var fullRegion: String
 
@@ -50,6 +36,22 @@ class LearnAwsS3ApplicationTests {
 
     @Autowired
     lateinit var awsFactory: AwsFactory
+
+    lateinit var fullClient: AmazonS3
+    lateinit var restrictClient: AmazonS3
+    lateinit var fullTransferManager: TransferManager
+    lateinit var restrictTransferManager: TransferManager
+
+    @BeforeEach
+    fun setup() {
+
+        fullClient = awsFactory.client(BucketType.FULL_ACCESS)
+        fullTransferManager = awsFactory.transferManager(BucketType.FULL_ACCESS)
+
+        restrictClient = awsFactory.client(BucketType.RESTRICT_ACCESS)
+        restrictTransferManager = awsFactory.transferManager(BucketType.RESTRICT_ACCESS)
+
+    }
 
     @Test
     fun contextLoads() {

@@ -5,24 +5,26 @@ import com.amazonaws.services.s3.transfer.TransferManager
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 
 @Configuration
 class AwsFullAccessConfiguration(
-        @Value("\${aws.s3.region}") override val region: String,
-        @Value("\${aws.s3.key}") override val key: String,
-        @Value("\${aws.s3.secret}") override val secret: String
-) : AwsClientConfiguration(region, key, secret) {
+        @Value("\${aws.s3.region}") private val region: String,
+        @Value("\${aws.s3.key}") private val key: String,
+        @Value("\${aws.s3.secret}") private val secret: String,
+        @Value("\${aws.s3.bucket}") private val bucket: String,
+        private val awsClientBuilder: AwsClientBuilder
+) : AwsConfiguration {
 
-    @Primary
-    @Bean(name = ["fullAccessClient"])
-    override fun client(): AmazonS3 {
-        return super.client()
+    @Bean("awsFullAccessClient")
+    override fun getClient(): AmazonS3 {
+        return awsClientBuilder.client(key, secret, region)
     }
 
-    @Primary
-    @Bean(name = ["fullAccessTransferManager"])
-    override fun transferManager(): TransferManager {
-        return super.transferManager()
+    @Bean("awsFullAccessTransferManager")
+    override fun getTransferManager(): TransferManager {
+        return awsClientBuilder.transferManager(getClient())
     }
+
+    @Bean("awsFullAccessBucket")
+    override fun getBucket(): String = bucket
 }

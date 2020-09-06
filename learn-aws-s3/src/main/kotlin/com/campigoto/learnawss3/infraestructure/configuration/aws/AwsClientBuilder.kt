@@ -6,13 +6,12 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.transfer.TransferManager
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
+import org.springframework.stereotype.Component
 
-abstract class AwsClientConfiguration(
-        open val region: String? = null,
-        open val key: String? = null,
-        open val secret: String? = null) {
+@Component
+class AwsClientBuilder() {
 
-    open fun client(): AmazonS3 {
+    fun client(key: String, secret: String, region: String): AmazonS3 {
 
         val credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(key, secret))
 
@@ -23,7 +22,7 @@ abstract class AwsClientConfiguration(
                 .build()
     }
 
-    open fun transferManager(): TransferManager {
-        return TransferManagerBuilder.standard().withS3Client(client()).build()
+    fun transferManager(client: AmazonS3): TransferManager {
+        return TransferManagerBuilder.standard().withS3Client(client).build()
     }
 }
