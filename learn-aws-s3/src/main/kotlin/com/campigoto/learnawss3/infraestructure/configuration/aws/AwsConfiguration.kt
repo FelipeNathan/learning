@@ -2,6 +2,7 @@ package com.campigoto.learnawss3.infraestructure.configuration.aws
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.transfer.TransferManager
+import com.campigoto.learnawss3.domain.valueObjects.BucketType
 
 interface AwsConfiguration {
 
@@ -10,4 +11,6 @@ interface AwsConfiguration {
     fun getTransferManager(): TransferManager
 
     fun getBucket(): String
+
+    fun getBucketType(): BucketType
 }

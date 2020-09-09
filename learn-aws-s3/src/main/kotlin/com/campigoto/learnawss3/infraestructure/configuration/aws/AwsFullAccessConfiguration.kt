@@ -2,6 +2,7 @@ package com.campigoto.learnawss3.infraestructure.configuration.aws
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.transfer.TransferManager
+import com.campigoto.learnawss3.domain.valueObjects.BucketType
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,6 +26,7 @@ class AwsFullAccessConfiguration(
         return awsClientBuilder.transferManager(getClient())
     }
 
-    @Bean("awsFullAccessBucket")
     override fun getBucket(): String = bucket
+
+    override fun getBucketType() = BucketType.FULL_ACCESS
 }
