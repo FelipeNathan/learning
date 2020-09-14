@@ -6,18 +6,19 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.transfer.TransferManager
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
+import com.campigoto.learnawss3.domain.valueObjects.AwsS3Properties
 import org.springframework.stereotype.Component
 
 @Component
 class AwsClientBuilder() {
 
-    fun client(key: String, secret: String, region: String): AmazonS3 {
+    fun client(properties: AwsS3Properties): AmazonS3 {
 
-        val credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(key, secret))
+        val credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(properties.key, properties.secret))
 
         return AmazonS3ClientBuilder
                 .standard()
-                .withRegion(region)
+                .withRegion(properties.region)
                 .withCredentials(credentials)
                 .build()
     }

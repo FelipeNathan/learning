@@ -7,6 +7,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.Region
 import com.amazonaws.services.s3.transfer.TransferManager
+import com.campigoto.learnawss3.domain.valueObjects.AwsS3Properties
 import com.campigoto.learnawss3.domain.valueObjects.BucketType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,13 +34,13 @@ class AwsFactoryTest {
         MockitoAnnotations.initMocks(this)
 
         val builder = AwsClientBuilder()
-        val defaultClient: AmazonS3 = builder.client(DEFAULT_KEY, DEFAULT_SECRET, DEFAULT_REGION)
+        val defaultClient: AmazonS3 = builder.client(AwsS3Properties(DEFAULT_REGION, DEFAULT_BUCKET, DEFAULT_SECRET, DEFAULT_KEY))
         Mockito.`when`(defaultConfiguration.getBucketType()).thenReturn(BucketType.FULL_ACCESS)
         Mockito.`when`(defaultConfiguration.getClient()).thenReturn(defaultClient)
         Mockito.`when`(defaultConfiguration.getTransferManager()).thenReturn(builder.transferManager(defaultClient))
         Mockito.`when`(defaultConfiguration.getBucket()).thenReturn(DEFAULT_BUCKET)
 
-        val temporaryClient: AmazonS3 = builder.client(TEMPORARY_KEY, TEMPORARY_SECRET, TEMPORARY_REGION)
+        val temporaryClient: AmazonS3 = builder.client(AwsS3Properties(TEMPORARY_REGION, TEMPORARY_BUCKET, TEMPORARY_SECRET, TEMPORARY_KEY))
         Mockito.`when`(temporaryConfiguration.getBucketType()).thenReturn(BucketType.RESTRICT_ACCESS)
         Mockito.`when`(temporaryConfiguration.getClient()).thenReturn(temporaryClient)
         Mockito.`when`(temporaryConfiguration.getBucket()).thenReturn(TEMPORARY_BUCKET)
