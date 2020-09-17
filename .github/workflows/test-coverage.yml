@@ -26,3 +26,12 @@ jobs:
             ${{ runner.os }}-maven-  
       - name: Running the test
         run: mvn -B clean test --file pom.xml
+        env:
+          AWS_S3_REGION:  ${{ secrets.AWS_S3_REGION }}
+          AWS_S3_BUCKET:  ${{ secrets.AWS_S3_BUCKET }}
+          AWS_S3_KEY: ${{ secrets.AWS_S3_KEY }}
+          AWS_S3_SECRET: ${{ secrets.AWS_S3_SECRET }}
+          AWS_S3_RESTRICT_REGION:  ${{ secrets.AWS_S3_RESTRICT_REGION }}
+          AWS_S3_RESTRICT_BUCKET:  ${{ secrets.AWS_S3_RESTRICT_BUCKET }}
+          AWS_S3_RESTRICT_KEY: ${{ secrets.AWS_S3_RESTRICT_KEY }}
+          AWS_S3_RESTRICT_SECRET: ${{ secrets.AWS_S3_RESTRICT_SECRET }}
