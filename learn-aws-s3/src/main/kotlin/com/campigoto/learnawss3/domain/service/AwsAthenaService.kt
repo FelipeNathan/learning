@@ -2,6 +2,8 @@ package com.campigoto.learnawss3.domain.service
 
 import com.amazonaws.services.athena.AmazonAthena
 import com.amazonaws.services.athena.model.*
+import com.campigoto.learnawss3.domain.mapper.AwsAthenaMapper
+import com.campigoto.learnawss3.domain.valueObjects.AwsAthenaObjectResult
 import com.campigoto.learnawss3.infraestructure.awsqueries.AthenaQueries
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -26,6 +28,20 @@ class AwsAthenaService(
     fun listEverything(): ResultSet? {
         val executionQueryId = startQuery(athenaQueries.everythingQuery())
         return waitQuery(executionQueryId)
+    }
+
+    fun listNameAndSizeCreatedObjets(): List<AwsAthenaObjectResult> {
+        val executionQueryId = startQuery(athenaQueries.listNameAndSizeCreatedObjets())
+        val resultSet = waitQuery(executionQueryId)
+
+        return AwsAthenaMapper.resultSetToObjectResult(resultSet)
+    }
+
+    fun listNameAndSizeReadObjets(): List<AwsAthenaObjectResult> {
+        val executionQueryId = startQuery(athenaQueries.listNameAndSizeReadObjets())
+        val resultSet = waitQuery(executionQueryId)
+
+        return AwsAthenaMapper.resultSetToObjectResult(resultSet)
     }
 
     private fun startQuery(query: String): String {
