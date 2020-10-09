@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/athena")
 class AthenaController(private val awsAthenaService: AwsAthenaService) {
 
-    @GetMapping("/sent-objects-event")
+    @GetMapping("/get-objects-event")
     fun getByPutObjectEvent(): ResponseEntity<ResultSet> {
         return ResponseEntity(awsAthenaService.listGetObjectEvent(), HttpStatus.OK)
     }
