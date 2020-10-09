@@ -29,6 +29,9 @@ class AwsFactoryTest {
     @Mock
     private lateinit var temporaryConfiguration: AwsConfiguration
 
+    @Mock
+    private lateinit var athenaConfiguration: AwsAthenaConfiguration
+
     @BeforeEach
     fun setup() {
         MockitoAnnotations.initMocks(this)
@@ -46,7 +49,7 @@ class AwsFactoryTest {
         Mockito.`when`(temporaryConfiguration.getBucket()).thenReturn(TEMPORARY_BUCKET)
         Mockito.`when`(temporaryConfiguration.getTransferManager()).thenReturn(builder.transferManager(temporaryClient))
 
-        factory = AwsFactory(mutableListOf(defaultConfiguration, temporaryConfiguration))
+        factory = AwsFactory(mutableListOf(defaultConfiguration, temporaryConfiguration), athenaConfiguration)
         factory.init()
     }
 

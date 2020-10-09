@@ -99,7 +99,7 @@ class AwsS3Service(private val awsFactory: AwsFactory) {
             throw AwsObjectException("Content type is required")
 
         val bucketName = awsFactory.bucket(vo.bucketType)
-        if (bucketName == null || bucketName.isEmpty())
+        if (bucketName.isEmpty())
             throw AwsObjectException("Bucket name is required")
     }
 

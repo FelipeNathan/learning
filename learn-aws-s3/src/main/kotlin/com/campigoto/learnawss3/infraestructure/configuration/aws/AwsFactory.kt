@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
 @Component
-class AwsFactory(private val awsConfigurations: List<AwsConfiguration>) {
+class AwsFactory(private val awsConfigurations: List<AwsConfiguration>, private val athenaConfiguration: AwsAthenaConfiguration) {
 
     private val configurations = mutableMapOf<BucketType, AwsConfiguration>()
 
@@ -17,4 +17,6 @@ class AwsFactory(private val awsConfigurations: List<AwsConfiguration>) {
     fun client(bucketType: BucketType) = configurations[bucketType]!!.getClient()
 
     fun transferManager(bucketType: BucketType) = configurations[bucketType]!!.getTransferManager()
+
+    fun athenaClient() = athenaConfiguration.client()
 }
