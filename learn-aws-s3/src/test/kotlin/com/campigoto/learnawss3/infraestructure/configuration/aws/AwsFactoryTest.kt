@@ -55,7 +55,7 @@ class AwsFactoryTest {
 
     @Test
     fun `default BucketType should return default bucket name`() {
-        val bucket: String = factory.bucket(BucketType.FULL_ACCESS)
+        val bucket: String? = factory.bucket(BucketType.FULL_ACCESS)
 
         assertEquals(bucket, DEFAULT_BUCKET)
     }
@@ -80,7 +80,7 @@ class AwsFactoryTest {
 
     @Test
     fun `temporary BucketType should return temporary bucket name`() {
-        val bucket: String = factory.bucket(BucketType.RESTRICT_ACCESS)
+        val bucket: String? = factory.bucket(BucketType.RESTRICT_ACCESS)
 
         assertEquals(bucket, TEMPORARY_BUCKET)
     }

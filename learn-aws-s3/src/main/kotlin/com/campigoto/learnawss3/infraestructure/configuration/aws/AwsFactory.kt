@@ -12,7 +12,7 @@ class AwsFactory(private val awsConfigurations: List<AwsConfiguration>, private 
     @PostConstruct
     fun init() = awsConfigurations.forEach { config -> configurations[config.getBucketType()] = config }
 
-    fun bucket(bucketType: BucketType) = configurations[bucketType]!!.getBucket()!!
+    fun bucket(bucketType: BucketType) = configurations[bucketType]!!.getBucket()
 
     fun client(bucketType: BucketType) = configurations[bucketType]!!.getClient()
 
