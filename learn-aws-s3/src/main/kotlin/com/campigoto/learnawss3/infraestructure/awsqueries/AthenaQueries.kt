@@ -13,13 +13,13 @@ class AthenaQueries(@Value("\${aws.athena.table-log}") private val table: String
     fun listByGetObjectEventQuery() = "SELECT * FROM $table WHERE eventName = 'GetObject'"
 
     fun listNameAndSizeCreatedObjets() = """
-            | SELECT json_extract(requestParameters, '$.key') as key,
+            | SELECT CAST(json_extract(requestParameters, '$.key') AS VARCHAR) as key,
             | json_extract(additionalEventData, '$.bytesTransferredIn') as byteTransferred
             | FROM $table
             | WHERE eventName = 'PutObject'""".trimMargin()
 
     fun listNameAndSizeReadObjets() = """
-            | SELECT json_extract(requestParameters, '$.key') as key,
+            | SELECT CAST(json_extract(requestParameters, ''$.key') AS VARCHAR) as key,
             | json_extract(additionalEventData, '$.bytesTransferredOut') as byteTransferred
             | FROM $table
             | WHERE eventName = 'GetObject'""".trimMargin()

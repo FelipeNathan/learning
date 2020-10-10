@@ -12,12 +12,8 @@ object AwsAthenaMapper {
 
         return resultSet.rows.subList(1, resultSet.rows.size).map { result ->
 
-            var key = result.data[0].varCharValue
+            val key = result.data[0].varCharValue
             val value = result.data[1].varCharValue
-
-            val regexQuotes = "^\"(.*)\"$".toRegex()
-
-            key = key.replace(regexQuotes, "$1")
 
             AwsAthenaObjectResult(key, value)
 
