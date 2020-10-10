@@ -2,6 +2,7 @@ package com.campigoto.learnawss3.domain.service
 
 import com.amazonaws.services.athena.AmazonAthena
 import com.amazonaws.services.athena.model.*
+import com.campigoto.learnawss3.application.exception.AwsAthenaException
 import com.campigoto.learnawss3.domain.mapper.AwsAthenaMapper
 import com.campigoto.learnawss3.domain.valueObjects.AwsAthenaObjectResult
 import com.campigoto.learnawss3.infraestructure.awsqueries.AthenaQueries
@@ -46,36 +47,49 @@ class AwsAthenaService(
 
     private fun startQuery(query: String): String {
 
-        val queryExecutionContext = QueryExecutionContext().withDatabase(database)
+        try {
+            val queryExecutionContext = QueryExecutionContext().withDatabase(database)
 
-        val startExecutionContext = StartQueryExecutionRequest()
-                .withQueryExecutionContext(queryExecutionContext)
-                .withQueryString(query)
-                .withResultConfiguration(ResultConfiguration().withOutputLocation("s3://felipe-nathan-athena-result"))
+            val startExecutionContext = StartQueryExecutionRequest()
+                    .withQueryExecutionContext(queryExecutionContext)
+                    .withQueryString(query)
+                    .withWorkGroup("learning-aws-athena")
+                    .withResultConfiguration(ResultConfiguration().withOutputLocation("s3://felipe-nathan-athena-result"))
 
-        return athenaClient.startQueryExecution(startExecutionContext).queryExecutionId
+            return athenaClient.startQueryExecution(startExecutionContext).queryExecutionId
+        } catch (e: Exception) {
+
+            throw AwsAthenaException("Failed in startQuery", e)
+        }
     }
 
     private fun waitQuery(queryExecutionId: String): ResultSet? {
 
-        val runningQueryRequest = GetQueryExecutionRequest().withQueryExecutionId(queryExecutionId)
+        try {
+            val runningQueryRequest = GetQueryExecutionRequest().withQueryExecutionId(queryExecutionId)
+            var tries = 50
+            while (tries-- > 0) {
 
-        while (true) {
+                val runningQuery = athenaClient.getQueryExecution(runningQueryRequest)
 
-            val runningQuery = athenaClient.getQueryExecution(runningQueryRequest)
+                when (runningQuery.queryExecution.status.state) {
+                    QueryExecutionState.FAILED.toString() -> throw AwsAthenaException("Query failed: ${runningQuery.queryExecution.status.stateChangeReason}")
+                    QueryExecutionState.CANCELLED.toString() -> throw AwsAthenaException("Query canceled")
+                    QueryExecutionState.SUCCEEDED.toString() -> {
 
-            when (runningQuery.queryExecution.status.state) {
-                QueryExecutionState.FAILED.toString() -> throw RuntimeException("Query failed: ${runningQuery.queryExecution.status.stateChangeReason}")
-                QueryExecutionState.CANCELLED.toString() -> throw RuntimeException("Query canceled")
-                QueryExecutionState.SUCCEEDED.toString() -> {
+                        val resultRequest = GetQueryResultsRequest().withQueryExecutionId(queryExecutionId)
+                        val result = athenaClient.getQueryResults(resultRequest)
 
-                    val resultRequest = GetQueryResultsRequest().withQueryExecutionId(queryExecutionId)
-                    val result = athenaClient.getQueryResults(resultRequest)
-
-                    return result.resultSet
+                        return result.resultSet
+                    }
+                    else -> Thread.sleep(WAIT_FOR)
                 }
-                else -> Thread.sleep(WAIT_FOR)
             }
+
+            throw AwsAthenaException("Failed to get query execution status")
+        } catch (e: Exception) {
+
+            throw AwsAthenaException("Failed in waitQuery", e)
         }
     }
 

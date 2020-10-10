@@ -10,8 +10,17 @@ object AwsAthenaMapper {
         if (resultSet == null)
             return mutableListOf()
 
-        val data = resultSet.rows.subList(1, resultSet.rows.size)
+        return resultSet.rows.subList(1, resultSet.rows.size).map { result ->
 
-        return data.map { d -> AwsAthenaObjectResult(d.data[0].varCharValue, d.data[1].varCharValue) }
+            var key = result.data[0].varCharValue
+            val value = result.data[1].varCharValue
+
+            val regexQuotes = "^\"(.*)\"$".toRegex()
+
+            key = key.replace(regexQuotes, "$1")
+
+            AwsAthenaObjectResult(key, value)
+
+        }.toCollection(mutableListOf())
     }
 }

@@ -2,6 +2,7 @@ package com.campigoto.learnawss3.application.controller
 
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.SdkClientException
+import com.campigoto.learnawss3.application.exception.AwsAthenaException
 import com.campigoto.learnawss3.application.exception.AwsObjectException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -33,6 +34,20 @@ class ControllerAdvice {
 
     @ExceptionHandler(AwsObjectException::class)
     fun awsObjectException(exception: AwsObjectException): ErrorResponse {
+
+        val message = exception.message
+
+        println(message)
+
+        exception.cause?.also {
+            println(it)
+        }
+
+        return ErrorResponse(message!!)
+    }
+
+    @ExceptionHandler(AwsAthenaException::class)
+    fun awsAthenaException(exception: AwsAthenaException): ErrorResponse {
 
         val message = exception.message
 
