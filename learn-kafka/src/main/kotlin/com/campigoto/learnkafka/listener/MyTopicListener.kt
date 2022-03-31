@@ -1,8 +1,8 @@
 package com.campigoto.learnkafka.listener
 
 import com.campigoto.learnkafka.fromJson
+import com.campigoto.learnkafka.model.Message
 import com.campigoto.learnkafka.service.KafkaProducerService
-import com.campigoto.learnkafka.service.Message
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.KafkaListener
 

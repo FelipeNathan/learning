@@ -18,6 +18,10 @@ class KafkaProducerService(
         producer.send(TOPIC_LIST, listOf(Message(), Message()).toJson())
     }
 
+    fun sendMessageToKey(key: String) {
+        producer.send(TOPIC, key, Message().toJson())
+    }
+
     companion object {
         const val TOPIC = "my-topic"
         const val TOPIC_LIST = "my-topic-list"
